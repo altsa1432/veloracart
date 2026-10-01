@@ -1,1 +1,1078 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VeloraCart - Discover your style with thoughtfully selected everyday essentials.">
+  <title>VeloraCart | Shop Beyond Ordinary</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #b18a52;
+      --ink: #211e1a;
+      --cream: #f8f5ef;
+      --muted: #777168;
+      --red: #ed1740;
+      --pico-primary: #947044;
+      --pico-primary-hover: #795a34;
+      --pico-font-family: 'DM Sans', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background: #fff;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    nav {
+      background: white;
+      border-bottom: 1px solid #eee8df;
+      padding: 10px 20px;
+    }
+
+    nav strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      letter-spacing: 2px;
+    }
+
+    nav a {
+      color: var(--ink);
+      font-size: .85rem;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--ink);
+    }
+
+    .hero {
+      background: var(--cream);
+      padding: 55px 25px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-size: .72rem;
+      font-weight: 700;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      line-height: 1.08;
+      margin: 15px 0;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 500px;
+      line-height: 1.8;
+    }
+
+    .hero img {
+      width: 100%;
+      height: 390px;
+      object-fit: cover;
+      border-radius: 3px;
+    }
+
+    .section-space {
+      padding-top: 65px;
+      padding-bottom: 45px;
+    }
+
+    .center { text-align: center; }
+    .muted { color: var(--muted); }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      border: 1px solid #eee9e1;
+      padding: 12px;
+      border-radius: 4px;
+      background: white;
+    }
+
+    .product img {
+      width: 100%;
+      height: 235px;
+      object-fit: cover;
+    }
+
+    .product h3 {
+      font-size: 1.15rem;
+      margin: 12px 0 4px;
+    }
+
+    .product p { margin-bottom: 8px; }
+
+    .price {
+      font-weight: 700;
+      color: #80613a;
+    }
+
+    .product button {
+      width: 100%;
+      margin: 8px 0 0;
+    }
+
+    button, [role="button"] {
+      border-radius: 3px !important;
+    }
+
+    .banner {
+      background: #26231f;
+      color: white;
+      padding: 55px 25px;
+      text-align: center;
+    }
+
+    .banner h2 { color: white; font-size: 2.3rem; }
+    .banner p { color: #d2c9bb; }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(150px,1fr));
+      gap: 20px;
+      text-align: center;
+      padding: 35px 0;
+    }
+
+    .benefits article {
+      background: var(--cream);
+      padding: 22px 12px;
+    }
+
+    .benefits h3 { font-size: 1rem; }
+
+    .benefits p {
+      font-size: .85rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .editorial {
+      background: var(--cream);
+      padding: 25px;
+    }
+
+    .editorial img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+    }
+
+    .panel {
+      border: 1px solid #eee8df;
+      padding: 20px;
+      border-radius: 4px;
+    }
+
+    .cart-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+      flex-wrap: wrap;
+    }
+
+    .small-btn {
+      padding: 5px 10px;
+      font-size: .8rem;
+    }
+
+    footer {
+      padding-top: 35px;
+      padding-bottom: 35px;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--muted); }
+
+    .hidden { display: none !important; }
+
+    #status, #orderStatus, #newsletterStatus {
+      font-size: .9rem;
+      overflow-wrap: anywhere;
+    }
+
+    /* DARK ANIME LOGIN MODAL */
+
+    .account-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      background: rgba(0,0,0,.90);
+      backdrop-filter: blur(10px);
+    }
+
+    .account-overlay.active {
+      display: flex;
+      animation: overlayIn .3s ease;
+    }
+
+    @keyframes overlayIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .anime-modal {
+      width: 100%;
+      max-width: 440px;
+      max-height: 92vh;
+      overflow-y: auto;
+      position: relative;
+      padding: 30px 24px;
+      color: white;
+      background:
+        radial-gradient(ellipse at 90% 5%, rgba(190,0,35,.30), transparent 45%),
+        linear-gradient(145deg,#171116,#080808 70%);
+      border: 1px solid rgba(255,35,65,.55);
+      border-radius: 12px;
+      box-shadow: 0 0 35px rgba(255,0,45,.25);
+      animation: animeEnter .45s cubic-bezier(.2,.8,.2,1);
+    }
+
+    @keyframes animeEnter {
+      from { opacity: 0; transform: translateY(35px) scale(.94); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .anime-modal::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg,transparent,#ff163d,#ff657c,transparent);
+    }
+
+    .anime-close {
+      position: absolute;
+      right: 14px;
+      top: 12px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      background: #291016;
+      border: 1px solid #69202d;
+      color: white;
+      font-size: 22px;
+    }
+
+    .anime-logo {
+      text-align: center;
+      font-family: 'Playfair Display',serif;
+      letter-spacing: 4px;
+      font-size: 25px;
+      color: white;
+      margin: 8px 0;
+    }
+
+    .anime-logo span { color: #ff294b; }
+
+    .anime-art {
+      height: 140px;
+      margin: 18px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 80%,#a40024 0%,transparent 45%),
+        linear-gradient(135deg,#270710,#080808 65%);
+      border: 1px solid #47101d;
+    }
+
+    .anime-art::before {
+      content: "影";
+      font-size: 110px;
+      line-height: 1;
+      color: rgba(255,25,65,.22);
+      font-family: serif;
+      text-shadow: 0 0 30px #ff123d;
+      animation: animeGlow 2.5s infinite alternate;
+    }
+
+    @keyframes animeGlow {
+      from { opacity: .4; transform: scale(.95); }
+      to { opacity: 1; transform: scale(1.06); }
+    }
+
+    .anime-tagline {
+      text-align: center;
+      color: #c7aeb3;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .anime-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 22px 0;
+    }
+
+    .anime-tabs button {
+      margin: 0;
+      background: #21151a;
+      color: #c9b9bd;
+      border: 1px solid #49202b;
+      font-size: 13px;
+    }
+
+    .anime-tabs button.selected {
+      background: #bd1234;
+      border-color: #ff3658;
+      color: white;
+      box-shadow: 0 0 15px rgba(255,0,55,.25);
+    }
+
+    .anime-modal h3 {
+      color: white;
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+
+    .anime-modal input {
+      background: #100d0f;
+      color: white;
+      border: 1px solid #49202b;
+      border-radius: 5px !important;
+    }
+
+    .anime-modal input:focus {
+      border-color: #ff294b;
+      box-shadow: 0 0 0 2px rgba(255,30,70,.15);
+    }
+
+    .anime-modal input::placeholder { color: #9a858b; }
+
+    .anime-submit {
+      width: 100%;
+      background: linear-gradient(100deg,#a50025,#ed1740);
+      border: 0;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 5px 20px rgba(220,0,45,.2);
+    }
+
+    .anime-submit:hover {
+      background: linear-gradient(100deg,#d00030,#ff3455);
+    }
+
+    .anime-note {
+      text-align: center;
+      color: #a9959a;
+      font-size: 12px;
+      margin: 15px 0 0;
+    }
+
+    .anime-modal #status {
+      text-align: center;
+      color: #ff7188;
+      overflow-wrap: anywhere;
+    }
+
+    @media(max-width:700px) {
+      .hero { padding: 30px 18px; }
+      .hero img { height: 260px; margin-top: 20px; }
+      .section-space { padding-top: 42px; padding-bottom: 30px; }
+      nav ul:last-child li:nth-child(2) { display: none; }
+    }
+
+    @media(max-width:480px) {
+      .anime-modal { padding: 25px 18px; }
+      .anime-art { height: 110px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<nav class="container-fluid">
+  <ul>
+    <li><strong>VELORACART</strong></li>
+  </ul>
+  <ul>
+    <li><a href="#shop">Shop</a></li>
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#" id="accountOpen" role="button">My Account</a></li>
+  </ul>
+</nav>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="grid">
+      <section>
+        <span class="eyebrow">The art of everyday living</span>
+        <h1>Style that speaks.<br>Quality that lasts.</h1>
+        <p>Discover a thoughtfully curated collection of everyday essentials, modern accessories and timeless favourites.</p>
+        <a href="#shop" role="button">Explore Collection</a>
+      </section>
+      <section>
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1000&q=85" alt="Elegant fashion boutique">
+      </section>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="benefits">
+    <article>
+      <h3>✦ Curated Quality</h3>
+      <p>Products selected with care</p>
+    </article>
+    <article>
+      <h3>♧ Easy Shopping</h3>
+      <p>A simple shopping experience</p>
+    </article>
+    <article>
+      <h3>◇ Secure Orders</h3>
+      <p>Protected account access</p>
+    </article>
+    <article>
+      <h3>♡ Customer Care</h3>
+      <p>Here to help when you need us</p>
+    </article>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="section-space center">
+    <span class="eyebrow">Discover your style</span>
+    <h2>Explore Our World</h2>
+    <p class="muted">Everyday essentials, thoughtfully chosen.</p>
+
+    <div class="grid">
+      <div>
+        <img style="width:100%;height:220px;object-fit:cover" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80" alt="Watches">
+        <h3>Accessories</h3>
+      </div>
+      <div>
+        <img style="width:100%;height:220px;object-fit:cover" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80" alt="Headphones">
+        <h3>Technology</h3>
+      </div>
+      <div>
+        <img style="width:100%;height:220px;object-fit:cover" src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80" alt="Backpack">
+        <h3>Everyday Living</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="shop" class="section-space">
+    <div class="center">
+      <span class="eyebrow">The Velora edit</span>
+      <h2>Featured Collection</h2>
+      <p class="muted">A little something for every day.</p>
+    </div>
+
+    <p id="productStatus" class="center muted">Loading products...</p>
+    <div id="products" class="product-grid"></div>
+  </section>
+
+  <!-- BANNER -->
+  <section class="banner">
+    <span class="eyebrow">A thoughtful way to shop</span>
+    <h2>Make Every Day Feel Special.</h2>
+    <p>Find pieces that fit your life and express your individuality.</p>
+    <a href="#shop" role="button" class="outline">Shop the Collection</a>
+  </section>
+
+  <!-- STORY -->
+  <section id="about" class="section-space">
+    <div class="grid editorial">
+      <div>
+        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=900&q=80" alt="Thoughtfully curated store">
+      </div>
+      <div>
+        <span class="eyebrow">The Velora story</span>
+        <h2>Less ordinary.<br>More meaningful.</h2>
+        <p class="muted">At VeloraCart, we believe shopping should feel simple, inspiring and personal. Our vision is to bring together useful finds and timeless style in one convenient destination.</p>
+        <a href="#shop" role="button" class="outline">Discover More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CART -->
+  <section id="cart" class="section-space">
+    <div class="center">
+      <span class="eyebrow">Your selection</span>
+      <h2>Shopping Cart</h2>
+    </div>
+    <div class="panel">
+      <div id="cartItems">Your cart is empty.</div>
+      <h3 id="cartTotal">Total: ₹0</h3>
+      <button id="checkoutButton" onclick="showCheckout()">Proceed to Checkout</button>
+    </div>
+  </section>
+
+  <!-- CHECKOUT -->
+  <section id="checkout" class="section-space hidden">
+    <div class="center">
+      <span class="eyebrow">Almost yours</span>
+      <h2>Delivery Details</h2>
+      <p class="muted">Cash on Delivery is currently available.</p>
+    </div>
+    <article class="panel">
+      <form id="orderForm">
+        <input id="customerName" placeholder="Full name" required>
+        <input id="customerPhone" type="tel" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
+        <textarea id="customerAddress" placeholder="Full delivery address, city, state and PIN code" required></textarea>
+        <button type="submit">Place COD Order</button>
+      </form>
+      <p id="orderStatus" role="status"></p>
+    </article>
+  </section>
+
+  <!-- BRAND MESSAGE -->
+  <section class="section-space center">
+    <span class="eyebrow">Stay in the loop</span>
+    <h2>A little inspiration, delivered.</h2>
+    <p class="muted">Discover new arrivals and everyday favourites.</p>
+    <a href="#shop" role="button" class="outline">Explore VeloraCart</a>
+  </section>
+
+</main>
+
+<!-- NEWSLETTER -->
+<section aria-label="Subscribe example">
+  <div class="container">
+    <article>
+      <hgroup>
+        <h2>Join the Velora Circle</h2>
+        <h3>Be the first to discover new collections.</h3>
+      </hgroup>
+      <form class="grid" id="newsletterForm">
+        <input type="text" id="firstname" name="firstname" placeholder="Your name" aria-label="Your name" required>
+        <input type="email" id="email" name="email" placeholder="Your email" aria-label="Your email" required>
+        <button type="submit">Stay Connected</button>
+      </form>
+      <p id="newsletterStatus" class="muted"></p>
+    </article>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="container">
+  <div class="center">
+    <h3>VELORACART</h3>
+    <p class="muted">Thoughtful finds. Timeless style.</p>
+    <small>
+      <a href="#about">Our Story</a> •
+      <a href="#shop">Shop</a> •
+      <a href="#" id="footerAccount">My Account</a>
+    </small>
+    <p><small>© 2026 VeloraCart. All rights reserved.</small></p>
+  </div>
+</footer>
+
+<!-- DARK ANIME LOGIN / SIGNUP POPUP -->
+<div class="account-overlay" id="accountModal">
+  <div class="anime-modal">
+
+    <button type="button" class="anime-close" id="accountClose" aria-label="Close">×</button>
+
+    <div class="anime-logo">VELORA<span>CART</span></div>
+    <p class="anime-tagline">ENTER THE WORLD OF VELORA</p>
+
+    <div class="anime-art" aria-label="Anime inspired red shadow artwork"></div>
+
+    <div class="anime-tabs">
+      <button type="button" id="loginTab" class="selected">LOGIN</button>
+      <button type="button" id="signupTab">SIGN UP</button>
+    </div>
+
+    <p id="accountStatus" class="anime-note">
+      Welcome back. Sign in to continue.
+    </p>
+
+    <div id="loginPanel">
+      <h3>Welcome Back</h3>
+      <form id="loginForm">
+        <input type="email" id="loginEmail" placeholder="Email address" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button type="submit" class="anime-submit">ENTER VELORA</button>
+      </form>
+    </div>
+
+    <div id="signupPanel" class="hidden">
+      <h3>Create Your Account</h3>
+      <form id="signupForm">
+        <input type="text" id="signupName" placeholder="Your name" required>
+        <input type="email" id="signupEmail" placeholder="Email address" required>
+        <input type="password" id="signupPassword" placeholder="Create password (6+ characters)" minlength="6" required>
+        <button type="submit" class="anime-submit">JOIN VELORA</button>
+      </form>
+    </div>
+
+    <p id="status" role="status"></p>
+    <p class="anime-note">A new experience awaits you.</p>
+
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    addDoc,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // YOUR FIREBASE PROJECT CONFIGURATION
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0OKCbd4T6vQKFvN1WfzWiSHkHVL28nzY",
+    authDomain: "veloracart-892406.firebaseapp.com",
+    projectId: "veloracart-892406",
+    storageBucket: "veloracart-892406.firebasestorage.app",
+    messagingSenderId: "1030012253486",
+    appId: "1:103001225348:web:ee285d1bac638997c076bf",
+    measurementId: "G-NXSZ4W8D5B"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const $ = id => document.getElementById(id);
+
+  let currentUser = null;
+  let cart = [];
+  let products = [];
+
+  // ANIME POPUP CONTROLS
+
+  const accountModal = $("accountModal");
+
+  function openAccountModal() {
+    accountModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeAccountModal() {
+    accountModal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  $("accountOpen").addEventListener("click", event => {
+    event.preventDefault();
+    openAccountModal();
+  });
+
+  $("footerAccount").addEventListener("click", event => {
+    event.preventDefault();
+    openAccountModal();
+  });
+
+  $("accountClose").addEventListener("click", closeAccountModal);
+
+  accountModal.addEventListener("click", event => {
+    if (event.target === accountModal) closeAccountModal();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeAccountModal();
+  });
+
+  $("loginTab").addEventListener("click", () => {
+    $("loginPanel").classList.remove("hidden");
+    $("signupPanel").classList.add("hidden");
+    $("loginTab").classList.add("selected");
+    $("signupTab").classList.remove("selected");
+    $("status").textContent = "";
+  });
+
+  $("signupTab").addEventListener("click", () => {
+    $("signupPanel").classList.remove("hidden");
+    $("loginPanel").classList.add("hidden");
+    $("signupTab").classList.add("selected");
+    $("loginTab").classList.remove("selected");
+    $("status").textContent = "";
+  });
+
+  // SAFE TEXT DISPLAY
+
+  function safeText(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    })[char]);
+  }
+
+  // SAMPLE PRODUCTS
+  // Firestore products collection can replace these products.
+
+  const starterProducts = [
+    {
+      id:"headphones",
+      name:"Wireless Headphones",
+      price:1499,
+      image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80",
+      description:"A modern everyday listening essential."
+    },
+    {
+      id:"watch",
+      name:"Classic Everyday Watch",
+      price:1999,
+      image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80",
+      description:"A timeless addition to your collection."
+    },
+    {
+      id:"backpack",
+      name:"Everyday Backpack",
+      price:899,
+      image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80",
+      description:"Practical style for everyday journeys."
+    },
+    {
+      id:"sunglasses",
+      name:"Modern Sunglasses",
+      price:699,
+      image:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=700&q=80",
+      description:"An effortless finishing touch."
+    }
+  ];
+
+  // LOAD PRODUCTS
+
+  async function loadProducts() {
+    $("productStatus").textContent = "Loading collection...";
+
+    try {
+      const snapshot = await getDocs(collection(db, "products"));
+
+      if (!snapshot.empty) {
+        products = snapshot.docs.map(d => ({
+          id:d.id,
+          ...d.data()
+        })).filter(p =>
+          p.name &&
+          Number.isFinite(Number(p.price)) &&
+          Number(p.price) >= 0 &&
+          typeof p.image === "string"
+        );
+      }
+
+      if (!products.length) {
+        products = starterProducts;
+        $("productStatus").textContent = "Showing our sample collection.";
+      } else {
+        $("productStatus").textContent = "";
+      }
+
+    } catch(error) {
+      console.error("Product loading:", error);
+      products = starterProducts;
+      $("productStatus").textContent = "Showing our sample collection.";
+    }
+
+    renderProducts();
+  }
+
+  function renderProducts() {
+    $("products").innerHTML = products.map(p => `
+      <article class="product">
+        <img
+          src="${safeText(p.image)}"
+          alt="${safeText(p.name)}"
+          loading="lazy"
+          onerror="this.src='https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=700&q=80'"
+        >
+        <h3>${safeText(p.name)}</h3>
+        <p class="muted">${safeText(p.description || "A thoughtful everyday find.")}</p>
+        <p class="price">₹${Number(p.price).toLocaleString("en-IN")}</p>
+        <button data-add="${safeText(p.id)}">Add to Cart</button>
+      </article>
+    `).join("");
+
+    document.querySelectorAll("[data-add]").forEach(button => {
+      button.addEventListener("click", () => {
+        addToCart(button.dataset.add);
+      });
+    });
+  }
+
+  // CART
+
+  function addToCart(id) {
+    const product = products.find(item => item.id === id);
+    if (!product) return;
+
+    const existing = cart.find(item => item.id === id);
+
+    if (existing) {
+      existing.quantity++;
+    } else {
+      cart.push({
+        id:product.id,
+        name:product.name,
+        price:Number(product.price),
+        image:product.image || "",
+        quantity:1
+      });
+    }
+
+    renderCart();
+    $("cart").scrollIntoView({behavior:"smooth"});
+  }
+
+  function renderCart() {
+    const container = $("cartItems");
+
+    if (!cart.length) {
+      container.textContent = "Your cart is empty.";
+    } else {
+      container.innerHTML = cart.map(item => `
+        <div class="cart-line">
+          <span>${safeText(item.name)} × ${item.quantity}</span>
+          <span>
+            ₹${(item.price * item.quantity).toLocaleString("en-IN")}
+            <button class="secondary small-btn" data-remove="${safeText(item.id)}">Remove</button>
+          </span>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-remove]").forEach(button => {
+        button.addEventListener("click", () => {
+          cart = cart.filter(item => item.id !== button.dataset.remove);
+          renderCart();
+        });
+      });
+    }
+
+    const total = cart.reduce(
+      (sum,item) => sum + item.price * item.quantity,
+      0
+    );
+
+    $("cartTotal").textContent =
+      "Total: ₹" + total.toLocaleString("en-IN");
+
+    $("checkoutButton").disabled = !cart.length;
+  }
+
+  // CHECKOUT
+
+  window.showCheckout = function() {
+    if (!cart.length) return;
+
+    if (!currentUser) {
+      $("status").textContent = "Please login before checkout.";
+      $("accountStatus").textContent = "Sign in to continue to checkout.";
+      openAccountModal();
+      return;
+    }
+
+    $("checkout").classList.remove("hidden");
+    $("checkout").scrollIntoView({behavior:"smooth"});
+  };
+
+  // FIREBASE SIGNUP
+
+  $("signupForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    $("status").textContent = "Creating your account...";
+
+    try {
+      const name = $("signupName").value.trim();
+
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        $("signupEmail").value.trim(),
+        $("signupPassword").value
+      );
+
+      await updateProfile(result.user, {
+        displayName:name
+      });
+
+      $("status").textContent = "Account created successfully!";
+      $("signupForm").reset();
+
+    } catch(error) {
+      console.error(error);
+      $("status").textContent = error.message;
+    }
+  });
+
+  // FIREBASE LOGIN
+
+  $("loginForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    $("status").textContent = "Signing in...";
+
+    try {
+      await signInWithEmailAndPassword(
+        auth,
+        $("loginEmail").value.trim(),
+        $("loginPassword").value
+      );
+
+      $("status").textContent = "Login successful!";
+      $("loginForm").reset();
+
+    } catch(error) {
+      console.error(error);
+      $("status").textContent = error.message;
+    }
+  });
+
+  // LOGOUT
+
+  window.logout = async function() {
+    try {
+      await signOut(auth);
+      $("status").textContent = "You have been logged out.";
+    } catch(error) {
+      $("status").textContent = error.message;
+    }
+  };
+
+  // AUTH STATE
+
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+
+    $("accountStatus").textContent = user
+      ? "Signed in as " + (user.email || "")
+      : "Welcome back. Sign in to continue.";
+
+    if (user) {
+      closeAccountModal();
+
+      if (user.displayName) {
+        $("customerName").value = user.displayName;
+      }
+    } else {
+      $("checkout").classList.add("hidden");
+    }
+  });
+
+  // PLACE COD ORDER
+
+  $("orderForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    if (!currentUser) {
+      $("orderStatus").textContent = "Please login first.";
+      openAccountModal();
+      return;
+    }
+
+    if (!cart.length) {
+      $("orderStatus").textContent = "Your cart is empty.";
+      return;
+    }
+
+    const button = $("orderForm").querySelector("button");
+    button.disabled = true;
+    $("orderStatus").textContent = "Placing your order...";
+
+    try {
+      const total = cart.reduce(
+        (sum,item) => sum + item.price * item.quantity,
+        0
+      );
+
+      const order = {
+        userId:currentUser.uid,
+        email:currentUser.email || "",
+        customerName:$("customerName").value.trim(),
+        phone:$("customerPhone").value.trim(),
+        address:$("customerAddress").value.trim(),
+
+        items:cart.map(item => ({
+          productId:item.id,
+          name:item.name,
+          price:item.price,
+          quantity:item.quantity
+        })),
+
+        total:total,
+        paymentMethod:"Cash on Delivery",
+        status:"Pending",
+        createdAt:serverTimestamp()
+      };
+
+      await addDoc(collection(db, "orders"), order);
+
+      cart = [];
+      renderCart();
+      $("orderForm").reset();
+
+      $("orderStatus").textContent =
+        "Your order has been placed successfully! Thank you for shopping with VeloraCart.";
+
+    } catch(error) {
+      console.error("Order error:",error);
+      $("orderStatus").textContent =
+        "Order could not be placed. Please try again.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  // NEWSLETTER DEMO
+
+  $("newsletterForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    $("newsletterStatus").textContent =
+      "Thank you for your interest in VeloraCart!";
+
+    $("newsletterForm").reset();
+  });
+
+  renderCart();
+  loadProducts();
+
+</script>
+
+</body>
+</html>
