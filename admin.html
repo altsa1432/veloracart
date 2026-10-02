@@ -1,103 +1,163 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VeloraCart Admin</title>
+  <title>VeloraCart Admin Panel</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
   <style>
-    body { background:#f5f1eb; color:#201c19; }
-    nav { background:#fff; padding:12px 5%; }
-    main.container { padding-top:35px; padding-bottom:60px; }
-    article { border-radius:16px; }
-    .brand { letter-spacing:3px; }
-    .product { display:grid; grid-template-columns:90px 1fr; gap:15px; align-items:center; }
-    .product img { width:90px; height:100px; object-fit:cover; border-radius:10px; }
-    .actions { display:flex; gap:8px; flex-wrap:wrap; }
-    .danger { background:#a52b2b; border-color:#a52b2b; }
-    .muted { color:#777; font-size:13px; }
-    #adminArea, #denied { display:none; }
+    :root { --pico-font-size: 15px; }
+    body { background:#f5f3ef; color:#222; }
+    nav { background:#171717; color:white; padding:12px 20px; }
+    nav strong { color:#d9b875; letter-spacing:1px; }
+    main.container { padding-top:28px; padding-bottom:50px; }
+    .panel { background:white; padding:22px; border-radius:14px; box-shadow:0 5px 25px #0000000b; margin-bottom:22px; }
+    h1,h2,h3 { color:#222; }
+    h1 { font-size:1.8rem; }
+    .gold { color:#a77b2c; }
+    .muted { color:#777; font-size:.9rem; }
+    .hidden { display:none !important; }
+    .product-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px; }
+    .product-card { border:1px solid #eee; border-radius:12px; padding:12px; background:#fff; }
+    .product-card img { width:100%; height:180px; object-fit:contain; background:#fafafa; border-radius:8px; }
+    .product-card h3 { font-size:1rem; margin:10px 0 5px; }
+    .price { font-weight:700; color:#9a702b; }
+    .danger { background:#a83232; border-color:#a83232; }
+    .preview { max-width:180px; max-height:180px; object-fit:contain; border:1px solid #eee; border-radius:10px; padding:5px; background:#fafafa; }
+    .status { padding:10px 12px; border-radius:8px; background:#f1eee8; margin:10px 0; }
+    .status.error { background:#fff0f0; color:#a22; }
+    .status.success { background:#edf8ef; color:#176b2b; }
+    button { border-radius:8px; }
+    @media(max-width:600px) {
+      main.container { padding:16px 12px 35px; }
+      .panel { padding:16px; }
+    }
   </style>
 </head>
 <body>
+
 <nav class="container-fluid">
-  <ul><li><strong class="brand">VELORACART ADMIN</strong></li></ul>
-  <ul><li><a href="/">Visit Store</a></li></ul>
+  <ul><li><strong>VELORACART</strong></li></ul>
+  <ul><li><a href="index.html">View Store</a></li></ul>
 </nav>
 
 <main class="container">
-  <section id="loginArea">
+  <h1>Admin Dashboard</h1>
+  <p class="muted">Manage your VeloraCart products.</p>
+
+  <section id="loginPanel" class="panel">
+    <h2>Admin Login</h2>
+    <label for="email">Email</label>
+    <input id="email" type="email" placeholder="Admin email" autocomplete="username">
+    <label for="password">Password</label>
+    <input id="password" type="password" placeholder="Your password" autocomplete="current-password">
+    <button id="loginBtn">Login</button>
+    <p id="loginMessage" class="muted"></p>
+  </section>
+
+  <section id="deniedPanel" class="panel hidden">
+    <h2>Access denied</h2>
+    <p>This account does not have admin access.</p>
+    <button id="deniedLogout" class="secondary">Logout</button>
+  </section>
+
+  <div id="dashboard" class="hidden">
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <h2>Welcome, Admin</h2>
+          <p class="muted">Import or add products to your store.</p>
+        </div>
+        <button id="logoutBtn" class="secondary">Logout</button>
+      </div>
+    </div>
+
+    <section class="panel">
+      <h2 class="gold">Import from Meesho</h2>
+      <p class="muted">Paste a public Meesho product URL. Available product details will be fetched for you to review.</p>
+      <label for="importUrl">Meesho Product URL</label>
+      <input id="importUrl" type="url" placeholder="https://www.meesho.com/...">
+      <button id="importBtn">Import Product Details</button>
+      <p id="importMessage" class="muted"></p>
+      <div id="importPreview" class="hidden">
+        <img id="importImagePreview" class="preview" alt="Imported product preview">
+        <p id="importTitlePreview"></p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 id="formHeading">Add Product</h2>
+      <p class="muted">Imported details appear below. Check and edit them before saving.</p>
+
+      <form id="productForm">
+        <label for="productName">Product Name</label>
+        <input id="productName" required placeholder="Product name">
+
+        <div class="grid">
+          <div>
+            <label for="price">Selling Price (₹)</label>
+            <input id="price" type="number" min="0" step="0.01" required placeholder="499">
+          </div>
+          <div>
+            <label for="oldPrice">Original Price (₹)</label>
+            <input id="oldPrice" type="number" min="0" step="0.01" placeholder="799">
+          </div>
+        </div>
+
+        <label for="imageUrl">Product Image URL</label>
+        <input id="imageUrl" type="url" required placeholder="https://example.com/product.jpg">
+
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="Fashion">Fashion</option>
+          <option value="Women">Women</option>
+          <option value="Men">Men</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Home">Home & Living</option>
+          <option value="Beauty">Beauty</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <label for="stock">Stock Quantity</label>
+        <input id="stock" type="number" min="0" value="10">
+
+        <label for="description">Description</label>
+        <textarea id="description" rows="4" placeholder="Product description"></textarea>
+
+        <label for="sourceUrl">Source Product URL (optional)</label>
+        <input id="sourceUrl" type="url" placeholder="Original product link">
+
+        <button id="saveBtn" type="submit">Add Product to Store</button>
+        <button id="clearBtn" type="button" class="secondary">Clear Form</button>
+      </form>
+      <p id="saveMessage" class="muted"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Products in Your Store</h2>
+      <p id="productCount" class="muted">Loading products...</p>
+      <div id="productsList" class="product-grid"></div>
+    </section>
+  </div>
+</main>
+
+<section aria-label="Admin information">
+  <div class="container">
     <article>
       <hgroup>
-        <h2>Admin Login</h2>
-        <p>Sign in with your authorized administrator account.</p>
+        <h2>VeloraCart Admin</h2>
+        <h3>Manage your online store</h3>
       </hgroup>
-      <form id="loginForm">
-        <label>Email
-          <input type="email" id="email" required value="n91938430@gmail.com">
-        </label>
-        <label>Password
-          <input type="password" id="password" required>
-        </label>
-        <button type="submit">Login to Admin</button>
-        <p id="loginMessage" class="muted"></p>
-      </form>
+      <p class="muted">Only your authorized admin account can add or delete products.</p>
     </article>
-  </section>
+  </div>
+</section>
 
-  <section id="denied">
-    <article>
-      <h2>Access denied</h2>
-      <p>This account is not authorized to manage VeloraCart products.</p>
-      <button id="logoutDenied" class="secondary">Sign out</button>
-    </article>
-  </section>
-
-  <section id="adminArea">
-    <hgroup>
-      <h2>Product Management</h2>
-      <p>Add products, update details and manage your store inventory.</p>
-    </hgroup>
-
-    <article>
-      <h3 id="formTitle">Add New Product</h3>
-      <form id="productForm">
-        <label>Product Name
-          <input id="productName" required placeholder="Example: Premium Watch">
-        </label>
-        <div class="grid">
-          <label>Price (₹)
-            <input id="price" type="number" min="0" step="0.01" required>
-          </label>
-          <label>Old Price (₹)
-            <input id="oldPrice" type="number" min="0" step="0.01">
-          </label>
-        </div>
-        <label>Product Image URL
-          <input id="imageUrl" type="url" required placeholder="https://example.com/photo.jpg">
-        </label>
-        <label>Category
-          <input id="category" placeholder="Fashion, Electronics, Beauty...">
-        </label>
-        <label>Stock Quantity
-          <input id="stock" type="number" min="0" value="10">
-        </label>
-        <label>Description
-          <textarea id="description" rows="4" placeholder="Product details..."></textarea>
-        </label>
-        <div class="grid">
-          <button type="submit" id="saveButton">Add Product</button>
-          <button type="button" class="secondary" id="cancelEdit" style="display:none">Cancel Edit</button>
-        </div>
-        <p id="formMessage" class="muted"></p>
-      </form>
-    </article>
-
-    <h3>Your Products</h3>
-    <button id="refreshButton" class="secondary outline">Refresh Products</button>
-    <div id="productList"></div>
-  </section>
-</main>
+<footer class="container">
+  <small>VeloraCart • Admin Dashboard</small>
+</footer>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -105,8 +165,8 @@
     getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
-    getFirestore, collection, getDocs, addDoc, updateDoc,
-    deleteDoc, doc, serverTimestamp
+    getFirestore, collection, addDoc, getDocs, deleteDoc,
+    doc, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
@@ -120,197 +180,223 @@
   };
 
   const ADMIN_UID = "1VkFLUKHxYTg9TCNbNv7lxJRWYm2";
+  const IMPORTER_URL = "https://veloracart-importer4deploybuttondab.altsa1432.workers.dev/import";
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-
   const $ = id => document.getElementById(id);
-  let editingId = null;
 
-  $("loginForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    $("loginMessage").textContent = "Signing in...";
+  function message(id, text, type = "") {
+    const el = $(id);
+    el.textContent = text;
+    el.className = "status " + type;
+  }
+
+  function showDashboard(show) {
+    $("dashboard").classList.toggle("hidden", !show);
+    $("loginPanel").classList.add("hidden");
+    $("deniedPanel").classList.add("hidden");
+  }
+
+  $("loginBtn").addEventListener("click", async () => {
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    if (!email || !password) {
+      message("loginMessage", "Email aur password dono bharo.", "error");
+      return;
+    }
+    $("loginBtn").disabled = true;
     try {
-      await signInWithEmailAndPassword(
-        auth, $("email").value.trim(), $("password").value
-      );
-      $("loginMessage").textContent = "";
+      await signInWithEmailAndPassword(auth, email, password);
+      message("loginMessage", "Login successful.", "success");
     } catch (error) {
-      $("loginMessage").textContent = error.message;
+      message("loginMessage", error.message, "error");
+    } finally {
+      $("loginBtn").disabled = false;
     }
   });
 
   async function logout() {
     await signOut(auth);
   }
-  $("logoutDenied").addEventListener("click", logout);
+  $("logoutBtn").addEventListener("click", logout);
+  $("deniedLogout").addEventListener("click", logout);
 
   onAuthStateChanged(auth, async user => {
-    $("loginArea").style.display = "none";
-    $("adminArea").style.display = "none";
-    $("denied").style.display = "none";
-
     if (!user) {
-      $("loginArea").style.display = "block";
+      $("dashboard").classList.add("hidden");
+      $("deniedPanel").classList.add("hidden");
+      $("loginPanel").classList.remove("hidden");
       return;
     }
 
     if (user.uid !== ADMIN_UID) {
-      $("denied").style.display = "block";
+      $("dashboard").classList.add("hidden");
+      $("loginPanel").classList.add("hidden");
+      $("deniedPanel").classList.remove("hidden");
       return;
     }
 
-    $("adminArea").style.display = "block";
+    showDashboard(true);
     await loadProducts();
   });
 
-  function getFormData() {
-    const name = $("productName").value.trim();
-    const price = Number($("price").value);
-    const oldPrice = $("oldPrice").value ? Number($("oldPrice").value) : null;
-    const image = $("imageUrl").value.trim();
-    const stock = Number($("stock").value);
-
-    if (!name || !image || !Number.isFinite(price) || price < 0 ||
-        !Number.isFinite(stock) || stock < 0) {
-      throw new Error("Please enter valid product details.");
+  $("importBtn").addEventListener("click", async () => {
+    const url = $("importUrl").value.trim();
+    if (!url) {
+      message("importMessage", "Pehle Meesho product URL paste karo.", "error");
+      return;
     }
 
-    return {
-      name,
-      title: name,
-      price,
-      oldPrice,
-      image,
-      imageUrl: image,
-      category: $("category").value.trim(),
-      stock,
-      description: $("description").value.trim()
-    };
-  }
-
-  $("productForm").addEventListener("submit", async e => {
-    e.preventDefault();
-    $("saveButton").disabled = true;
-    $("formMessage").textContent = "Saving product...";
+    $("importBtn").disabled = true;
+    $("importBtn").textContent = "Importing...";
+    message("importMessage", "Product details fetch ho rahi hain...");
 
     try {
-      if (!auth.currentUser || auth.currentUser.uid !== ADMIN_UID) {
-        throw new Error("Admin login required.");
+      const response = await fetch(IMPORTER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Product details nahi mil paayi.");
       }
 
-      const data = getFormData();
+      const p = result.product || {};
+      if (p.name) $("productName").value = p.name;
+      if (p.price !== null && p.price !== undefined && p.price !== "") {
+        $("price").value = p.price;
+      }
+      if (p.image) $("imageUrl").value = p.image;
+      if (p.description) $("description").value = p.description;
+      if (p.sourceUrl || url) $("sourceUrl").value = p.sourceUrl || url;
 
-      if (editingId) {
-        await updateDoc(doc(db, "products", editingId), data);
-        $("formMessage").textContent = "Product updated successfully!";
+      if (p.image) {
+        $("importImagePreview").src = p.image;
+        $("importPreview").classList.remove("hidden");
       } else {
-        await addDoc(collection(db, "products"), {
-          ...data,
-          createdAt: serverTimestamp()
-        });
-        $("formMessage").textContent = "Product added successfully!";
+        $("importPreview").classList.add("hidden");
       }
-
-      resetForm();
-      await loadProducts();
+      $("importTitlePreview").textContent = p.name || "Title manually add karein";
+      message("importMessage", "Import complete. Details check/edit karke Add Product dabayein.", "success");
     } catch (error) {
-      $("formMessage").textContent = error.message;
+      message("importMessage", "Import nahi ho paaya: " + error.message + " Aap details manually bhi bhar sakte hain.", "error");
     } finally {
-      $("saveButton").disabled = false;
+      $("importBtn").disabled = false;
+      $("importBtn").textContent = "Import Product Details";
     }
   });
 
+  $("productForm").addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const user = auth.currentUser;
+    if (!user || user.uid !== ADMIN_UID) {
+      message("saveMessage", "Admin login required.", "error");
+      return;
+    }
+
+    const name = $("productName").value.trim();
+    const price = Number($("price").value);
+    const image = $("imageUrl").value.trim();
+
+    if (!name || !image || !Number.isFinite(price) || price < 0) {
+      message("saveMessage", "Name, valid price aur image URL check karein.", "error");
+      return;
+    }
+
+    const product = {
+      name,
+      title: name,
+      price,
+      oldPrice: Number($("oldPrice").value) || null,
+      image,
+      imageUrl: image,
+      category: $("category").value,
+      stock: Math.max(0, Number($("stock").value) || 0),
+      description: $("description").value.trim(),
+      sourceUrl: $("sourceUrl").value.trim(),
+      createdAt: serverTimestamp()
+    };
+
+    $("saveBtn").disabled = true;
+    try {
+      await addDoc(collection(db, "products"), product);
+      message("saveMessage", "Product Firebase mein add ho gaya!", "success");
+      $("productForm").reset();
+      $("stock").value = 10;
+      $("importUrl").value = "";
+      $("importPreview").classList.add("hidden");
+      await loadProducts();
+    } catch (error) {
+      message("saveMessage", "Save error: " + error.message, "error");
+    } finally {
+      $("saveBtn").disabled = false;
+    }
+  });
+
+  $("clearBtn").addEventListener("click", () => {
+    $("productForm").reset();
+    $("stock").value = 10;
+    $("saveMessage").textContent = "";
+  });
+
   async function loadProducts() {
-    $("productList").innerHTML = "<p>Loading products...</p>";
+    $("productsList").innerHTML = "";
+    $("productCount").textContent = "Loading products...";
     try {
       const snapshot = await getDocs(collection(db, "products"));
-      $("productList").innerHTML = "";
+      $("productCount").textContent = snapshot.size + " product(s) in your store.";
 
       if (snapshot.empty) {
-        $("productList").innerHTML = "<p>No products added yet.</p>";
+        $("productsList").textContent = "Abhi koi product add nahi hua.";
         return;
       }
 
       snapshot.forEach(item => {
         const p = item.data();
         const card = document.createElement("article");
-        card.className = "product";
+        card.className = "product-card";
 
         const img = document.createElement("img");
         img.src = p.image || p.imageUrl || "";
-        img.alt = p.name || p.title || "Product";
+        img.alt = p.name || "Product";
         img.onerror = () => { img.style.display = "none"; };
 
-        const details = document.createElement("div");
-        const heading = document.createElement("strong");
-        heading.textContent = p.name || p.title || "Untitled product";
+        const title = document.createElement("h3");
+        title.textContent = p.name || p.title || "Untitled product";
 
         const price = document.createElement("p");
-        price.textContent = "₹" + (p.price ?? 0) + " · Stock: " + (p.stock ?? "—");
+        price.className = "price";
+        price.textContent = "₹" + (p.price ?? "—");
 
-        const actions = document.createElement("div");
-        actions.className = "actions";
+        const category = document.createElement("p");
+        category.className = "muted";
+        category.textContent = (p.category || "Other") + " • Stock: " + (p.stock ?? "—");
 
-        const edit = document.createElement("button");
-        edit.type = "button";
-        edit.className = "secondary";
-        edit.textContent = "Edit";
-        edit.addEventListener("click", () => startEdit(item.id, p));
+        const del = document.createElement("button");
+        del.className = "danger";
+        del.textContent = "Delete Product";
+        del.addEventListener("click", async () => {
+          if (!confirm("Is product ko delete karna hai?")) return;
+          try {
+            await deleteDoc(doc(db, "products", item.id));
+            await loadProducts();
+          } catch (error) {
+            alert("Delete error: " + error.message);
+          }
+        });
 
-        const remove = document.createElement("button");
-        remove.type = "button";
-        remove.className = "danger";
-        remove.textContent = "Delete";
-        remove.addEventListener("click", () => removeProduct(item.id));
-
-        actions.append(edit, remove);
-        details.append(heading, price, actions);
-        card.append(img, details);
-        $("productList").append(card);
+        card.append(img, title, price, category, del);
+        $("productsList").appendChild(card);
       });
     } catch (error) {
-      $("productList").textContent = "Could not load products: " + error.message;
+      $("productCount").textContent = "Products load nahi hue: " + error.message;
     }
   }
-
-  function startEdit(id, p) {
-    editingId = id;
-    $("productName").value = p.name || p.title || "";
-    $("price").value = p.price ?? "";
-    $("oldPrice").value = p.oldPrice ?? "";
-    $("imageUrl").value = p.image || p.imageUrl || "";
-    $("category").value = p.category || "";
-    $("stock").value = p.stock ?? 0;
-    $("description").value = p.description || "";
-    $("formTitle").textContent = "Edit Product";
-    $("saveButton").textContent = "Save Changes";
-    $("cancelEdit").style.display = "block";
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  async function removeProduct(id) {
-    if (!confirm("Are you sure you want to delete this product?")) return;
-    try {
-      await deleteDoc(doc(db, "products", id));
-      await loadProducts();
-    } catch (error) {
-      alert("Delete failed: " + error.message);
-    }
-  }
-
-  function resetForm() {
-    editingId = null;
-    $("productForm").reset();
-    $("stock").value = 10;
-    $("formTitle").textContent = "Add New Product";
-    $("saveButton").textContent = "Add Product";
-    $("cancelEdit").style.display = "none";
-  }
-
-  $("cancelEdit").addEventListener("click", resetForm);
-  $("refreshButton").addEventListener("click", loadProducts);
 </script>
 </body>
-  </html>
+</html>
